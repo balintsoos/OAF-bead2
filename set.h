@@ -28,8 +28,6 @@ class Set
 		void symDef(Set& s);
 		bool isContain(int n);
 		bool isEmpty();
-		int getSize();
-		int * getItems();
 	
 	private:
 		struct item {
@@ -39,8 +37,6 @@ class Set
   		item(int i = 0, item *q = 0) : value(i), next(q) {}
 		};
 		item *head;
-		item *current;
-		int size;
 };
 
 #endif

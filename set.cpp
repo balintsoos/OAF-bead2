@@ -16,8 +16,6 @@ using namespace std;
 Set::Set()
 {
 	head = 0;
-	current = root;
-	size = 0;
 }
 
 // constructor w/ argumentum
@@ -44,12 +42,7 @@ Set::~Set()
 // sajat masolo konstructor
 Set::Set(Set& s)
 {
-	size = s.size;
-	head = new item();
-	for (int i = 0; i < size; ++i)
-	{
-		items[i] = s.items[i];
-	}
+	//
 }
 
 // sajat ertekadas operator
@@ -76,20 +69,27 @@ Set& Set::operator= (Set& s)
 // kimeneti adat: nincs (void)
 void Set::put(int n)
 {
-	if (!isContain(n))
+	if(isEmpty())
 	{
-		item *u, *p;
-		for (u = head, p = head->next;
-			p != 0 && (p->value < n);
-			u = p, p = p->next);
-		
-		size++;
-		Node *i = u;
-		i->next = new item(n, i->next);
+		//
 	}
 	else
 	{
-		throw CONTAIN;
+		if (!isContain(n))
+		{
+			item *u, *p;
+			for (u = head, p = head->next;
+				p != 0 && (p->value < n);
+				u = p, p = p->next);
+			
+			size++;
+			Node *i = u;
+			i->next = new item(n, i->next);
+		}
+		else
+		{
+			throw CONTAIN;
+		}
 	}
 }
 
@@ -136,18 +136,6 @@ void Set::print()
 		cout << items[i] << " ";
 	}
 	cout << endl;
-}
-
-// segedfuggveny: atadja a halmaz hosszusagat
-int Set::getSize()
-{
-	return size;
-}
-
-// segedfuggveny: atadja a halmaz elemeit
-int * Set::getItems()
-{
-	return items;
 }
 
 // ket halmaz metszete
@@ -208,21 +196,22 @@ void Set::symDef(Set& s)
 bool Set::isContain(int n)
 {
 	bool found = false;
-	for (int i = 0; (i < size) && (!found); ++i)
+	item *p = head;
+	while ((p != 0) && !found)
 	{
-		if (items[i] == n)
+		if(p->value == n)
 		{
 			found = true;
 		}
+		p = p->next;
 	}
 	return found;
 }
 
 // ures-e a halmaz
-// tomb hosszusaga nulla-e
 // bemeneti adat: nincs
 // kimeneti adat: logikai (bool)
 bool Set::isEmpty()
 {
-	return size == 0;
+	return head == 0;
 }
