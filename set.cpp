@@ -12,10 +12,11 @@
 using namespace std;
 
 // constructor
-// inicializalasnal a halmaz elemeit tartalmazo tomb egy nullpointer, merete 0
+// inicializalasnal a halmaz elemeit tartalmazo lancolt lista egy nullpointer, merete 0
 Set::Set()
 {
-	items = NULL;
+	head = 0;
+	current = root;
 	size = 0;
 }
 
@@ -28,17 +29,23 @@ Set::Set(int n)
 }
 
 // destructor
-// torli a halmaz elemeit reprezentalo tombot
+// torli a halmaz elemeit reprezentalo lancolt listat
 Set::~Set()
 {
-	delete[] items;
+	item *p = head;
+	while (p != 0)
+	{
+		item *q = p->next;
+		delete p;
+		p = q;
+	}
 }
 
 // sajat masolo konstructor
 Set::Set(Set& s)
 {
 	size = s.size;
-	items = new int[size];
+	head = new item();
 	for (int i = 0; i < size; ++i)
 	{
 		items[i] = s.items[i];
@@ -69,49 +76,20 @@ Set& Set::operator= (Set& s)
 // kimeneti adat: nincs (void)
 void Set::put(int n)
 {
-	if (isEmpty())
+	if (!isContain(n))
 	{
-		delete[] items;
-		items = new int[++size];
-		items[0] = n;
+		item *u, *p;
+		for (u = head, p = head->next;
+			p != 0 && (p->value < n);
+			u = p, p = p->next);
+		
+		size++;
+		Node *i = u;
+		i->next = new item(n, i->next);
 	}
 	else
 	{
-		if (!isContain(n))
-		{
-			int * temp = new int[size+1];
-			int i = 0;
-			int tempI = 0;
-			bool Nfound = false;
-			for (; (i < size) && (!Nfound); i++)
-			{
-				if (items[i] > n)
-				{
-					Nfound = true;
-					temp[tempI++] = n;
-					temp[tempI++] = items[i];
-				}
-				else
-				{
-					temp[tempI++] = items[i];
-				}
-			}
-			for (; i < size; ++i)
-			{
-				temp[tempI++] = items[i];
-			}
-			if (!Nfound)
-			{
-				temp[tempI] = n;
-			}
-			delete[] items;
-			items = temp;
-			size++;
-		}
-		else
-		{
-			throw CONTAIN;
-		}
+		throw CONTAIN;
 	}
 }
 

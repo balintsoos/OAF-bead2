@@ -13,6 +13,7 @@ class Set
 {
 	public:
 		enum Exceptions{EMPTY, CONTAIN, INVALID_ITEM};
+		
 		Set();
 		Set(int n);
 		~Set();
@@ -31,7 +32,14 @@ class Set
 		int * getItems();
 	
 	private:
-		int * items;
+		struct item {
+  		int value;
+  		item *next;
+
+  		item(int i = 0, item *q = 0) : value(i), next(q) {}
+		};
+		item *head;
+		item *current;
 		int size;
 };
 
