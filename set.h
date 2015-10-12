@@ -30,13 +30,13 @@ class Set
 		bool isEmpty();
 	
 	private:
-		struct item {
+		struct Node {
   		int value;
-  		item *next;
+  		Node *next;
 
-  		item(int i = 0, item *q = 0) : value(i), next(q) {}
+  		Node(int i = 0, Node *q = 0) : value(i), next(q) {}
 		};
-		item *head;
+		Node *root;
 };
 
 #endif

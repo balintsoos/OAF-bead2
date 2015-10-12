@@ -15,7 +15,7 @@ using namespace std;
 // inicializalasnal a halmaz elemeit tartalmazo lancolt lista egy nullpointer, merete 0
 Set::Set()
 {
-	head = 0;
+	root = 0;
 }
 
 // constructor w/ argumentum
@@ -30,10 +30,10 @@ Set::Set(int n)
 // torli a halmaz elemeit reprezentalo lancolt listat
 Set::~Set()
 {
-	item *p = head;
+	Node *p = root;
 	while (p != 0)
 	{
-		item *q = p->next;
+		Node *q = p->next;
 		delete p;
 		p = q;
 	}
@@ -49,12 +49,24 @@ Set::Set(Set& s)
 Set& Set::operator= (Set& s)
 {
 	if (this == &s) return *this;
-	delete[] items;
-	size = s.size;
-	items = new int[size];
-	for (int i = 0; i < size; ++i)
+	
+	// lista lebontasa
+	while(root != 0)
 	{
-		items[i] = s.items[i];
+		Node *p = root;
+		root = p->next;
+		delete p;
+	}
+	u->next = p->next;
+	delete p;
+
+	// lista felepitese
+	Node *thisCurrent = root;
+	Node *sCurrent = s.root;
+	while(sCurrent != 0)
+	{
+		thisCurrent = new Node(sCurrent->value);
+		//
 	}
 	return *this;
 }
@@ -71,20 +83,22 @@ void Set::put(int n)
 {
 	if(isEmpty())
 	{
-		//
+		root = new Node(n);
 	}
 	else
 	{
 		if (!isContain(n))
 		{
-			item *u, *p;
-			for (u = head, p = head->next;
-				p != 0 && (p->value < n);
-				u = p, p = p->next);
+			Node *u = root;
+			Node *p = root->next;
+
+			while(p != 0 && (p->value < n))
+			{
+				u = p;
+				p = p->next;
+			}
 			
-			size++;
-			Node *i = u;
-			i->next = new item(n, i->next);
+			u->next = new Node(n, u->next);
 		}
 		else
 		{
@@ -104,18 +118,17 @@ void Set::remove(int n)
 {
 	if (isContain(n))
 	{
-		int * temp = new int[size-1];
-		int tempI = 0;
-		for (int i = 0; i < size; ++i)
+		Node *u = root;
+		Node *p = root->next;
+
+		while(p != 0 && (p->value < n))
 		{
-			if(items[i] != n)
-			{
-				temp[tempI++] = items[i];
-			}
+			u = p;
+			p = p->next;
 		}
-		delete[] items;
-		items = temp;
-		size--;
+
+		u->next = p->next;
+		delete p;
 	}
 	else
 	{
@@ -129,11 +142,13 @@ void Set::remove(int n)
 // bemeneti ertek: nincs, kimeneti ertek: nincs
 void Set::print()
 {
-	cout << "\nSize: " << size << endl;
 	cout << "Items: ";
-	for (int i = 0; i < size; ++i)
+	Node *p = root;
+
+	while(p != 0)
 	{
-		cout << items[i] << " ";
+		cout << p->value << " ";
+		p = p->next;
 	}
 	cout << endl;
 }
@@ -151,43 +166,43 @@ void Set::print()
 // valamelyik tomb veget
 // bemeneti adat: egy halmaz
 // kimeneti adat: nincs (void)
-void Set::intersection(Set& s)
-{
-	if (!isEmpty() && !s.isEmpty())
-	{
-		int iOfThis = size-1;
-		int iOfArg = s.getSize()-1;
-		int * itemsOfArg = s.getItems();
+// void Set::intersection(Set& s)
+// {
+// 	if (!isEmpty() && !s.isEmpty())
+// 	{
+// 		int iOfThis = size-1;
+// 		int iOfArg = s.getSize()-1;
+// 		int * itemsOfArg = s.getItems();
 
-		while (iOfThis >= 0 && iOfArg >= 0)
-		{
-			if (items[iOfThis] > itemsOfArg[iOfArg])
-			{
-				iOfThis--;
-			}
-			else if (items[iOfThis] < itemsOfArg[iOfArg])
-			{
-				iOfArg--;
-			}
-			else if (items[iOfThis] == itemsOfArg[iOfArg])
-			{
-				cout << items[iOfThis] << " ";
-				iOfThis--;
-				iOfArg--;
-			}
-		}
-		cout << endl;
-	}
-	else
-	{
-		throw EMPTY;
-	}
-}
+// 		while (iOfThis >= 0 && iOfArg >= 0)
+// 		{
+// 			if (items[iOfThis] > itemsOfArg[iOfArg])
+// 			{
+// 				iOfThis--;
+// 			}
+// 			else if (items[iOfThis] < itemsOfArg[iOfArg])
+// 			{
+// 				iOfArg--;
+// 			}
+// 			else if (items[iOfThis] == itemsOfArg[iOfArg])
+// 			{
+// 				cout << items[iOfThis] << " ";
+// 				iOfThis--;
+// 				iOfArg--;
+// 			}
+// 		}
+// 		cout << endl;
+// 	}
+// 	else
+// 	{
+// 		throw EMPTY;
+// 	}
+// }
 
-void Set::symDef(Set& s)
-{
-	//
-}
+// void Set::symDef(Set& s)
+// {
+// 	//
+// }
 
 // tartalmaz-e a halmaz egz adott elemet
 // lineraris keresest alkalmazva keressuk az elemet a tombben
@@ -196,7 +211,7 @@ void Set::symDef(Set& s)
 bool Set::isContain(int n)
 {
 	bool found = false;
-	item *p = head;
+	Node *p = root;
 	while ((p != 0) && !found)
 	{
 		if(p->value == n)
@@ -213,5 +228,5 @@ bool Set::isContain(int n)
 // kimeneti adat: logikai (bool)
 bool Set::isEmpty()
 {
-	return head == 0;
+	return root == 0;
 }
