@@ -12,7 +12,7 @@
 using namespace std;
 
 // constructor
-// inicializalasnal a halmaz elemeit tartalmazo lancolt lista egy nullpointer, merete 0
+// inicializalasnal a halmaz elemeit tartalmazo lancolt lista egy nullpointer
 Set::Set()
 {
 	root = 0;
@@ -42,7 +42,24 @@ Set::~Set()
 // sajat masolo konstructor
 Set::Set(Set& s)
 {
-	//
+	// lista lebontasa
+	while(root != 0)
+	{
+		Node *p = root;
+		root = p->next;
+		delete p;
+	}
+	
+	// lista felepitese
+	root = new Node(s.root->value);
+	Node *thisCurrent = root;
+	Node *sCurrent = s.root;
+	while(sCurrent != 0)
+	{
+		thisCurrent->next = new Node(sCurrent->next->value);
+		thisCurrent = thisCurrent->next;
+		sCurrent = sCurrent->next;
+	}
 }
 
 // sajat ertekadas operator
@@ -57,16 +74,16 @@ Set& Set::operator= (Set& s)
 		root = p->next;
 		delete p;
 	}
-	u->next = p->next;
-	delete p;
-
+	
 	// lista felepitese
+	root = new Node(s.root->value);
 	Node *thisCurrent = root;
 	Node *sCurrent = s.root;
 	while(sCurrent != 0)
 	{
-		thisCurrent = new Node(sCurrent->value);
-		//
+		thisCurrent->next = new Node(sCurrent->next->value);
+		thisCurrent = thisCurrent->next;
+		sCurrent = sCurrent->next;
 	}
 	return *this;
 }
@@ -166,8 +183,8 @@ void Set::print()
 // valamelyik tomb veget
 // bemeneti adat: egy halmaz
 // kimeneti adat: nincs (void)
-// void Set::intersection(Set& s)
-// {
+void Set::intersection(Set& s)
+{
 // 	if (!isEmpty() && !s.isEmpty())
 // 	{
 // 		int iOfThis = size-1;
@@ -197,12 +214,12 @@ void Set::print()
 // 	{
 // 		throw EMPTY;
 // 	}
-// }
+}
 
-// void Set::symDef(Set& s)
-// {
-// 	//
-// }
+void Set::symDef(Set& s)
+{
+	//
+}
 
 // tartalmaz-e a halmaz egz adott elemet
 // lineraris keresest alkalmazva keressuk az elemet a tombben
