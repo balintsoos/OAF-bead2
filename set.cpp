@@ -246,22 +246,21 @@ void Set::symDef(Set& s)
 				This = This->next;
 				Arg = Arg->next;
 			}
-
-			if (This == 0)
+		}
+		if (This == 0)
+		{
+			while (Arg != 0)
 			{
-				while (Arg != 0)
-				{
-					cout << Arg->value << " ";
-					Arg = Arg->next;
-				}
+				cout << Arg->value << " ";
+				Arg = Arg->next;
 			}
-			else if (Arg == 0)
+		}
+		else if (Arg == 0)
+		{
+			while (This != 0)
 			{
-				while (This != 0)
-				{
-					cout << This->value << " ";
-					This = This->next;
-				}
+				cout << This->value << " ";
+				This = This->next;
 			}
 		}
 		cout << endl;
