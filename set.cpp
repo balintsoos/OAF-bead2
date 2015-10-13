@@ -226,7 +226,45 @@ void Set::symDef(Set& s)
 	}
 	else
 	{
-		cout << "ELSE" << endl;
+		Node *This = root->next;
+		Node *Arg = s.root->next;
+
+		while (This != 0 && Arg != 0)
+		{
+			if (This->value > Arg->value)
+			{
+				cout << Arg->value << " ";
+				Arg = Arg->next;
+			}
+			else if (This->value < Arg->value)
+			{
+				cout << This->value << " ";
+				This = This->next;
+			}
+			else if (This->value == Arg->value)
+			{
+				This = This->next;
+				Arg = Arg->next;
+			}
+
+			if (This == 0)
+			{
+				while (Arg != 0)
+				{
+					cout << Arg->value << " ";
+					Arg = Arg->next;
+				}
+			}
+			else if (Arg == 0)
+			{
+				while (This != 0)
+				{
+					cout << This->value << " ";
+					This = This->next;
+				}
+			}
+		}
+		cout << endl;
 	}
 }
 

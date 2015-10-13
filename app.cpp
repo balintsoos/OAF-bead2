@@ -217,4 +217,3 @@ void App::symDef()
 		cout << "Set " << setNumber << " doesn't exist" << endl;
 	}
 }
-
