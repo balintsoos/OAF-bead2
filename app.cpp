@@ -41,6 +41,7 @@ void App::run()
 		displayNav();
 		cout << endl << "Choose a method: ";
 		cin >> v;
+		cout << "-------------------------------" << endl;
 		switch(v)
 		{
 			case 1: newSet(); break;
@@ -136,8 +137,8 @@ void App::remove()
 
 void App::print()
 {
-	cout << "\nSet " << currentSet << ":";
-	sets[currentSet].print();
+	cout << "\nSet " << currentSet << ": ";
+	sets[currentSet].print();	
 }
 
 void App::isContain()
@@ -176,9 +177,11 @@ void App::intersection()
 	if(setNumber < size && setNumber >= 0)
 	{
 		cout << "Intersection of Set " << currentSet << " and Set " << setNumber << endl;
+		cout << "Set " << currentSet << ": ";
 		sets[currentSet].print();
+		cout << "Set " << setNumber << ": ";
 		sets[setNumber].print();
-		cout << "\nIntersection: " << endl;
+		cout << "\nIntersection: ";
 		try {
 			sets[currentSet].intersection(sets[setNumber]);
 		} catch (Set::Exceptions ex) {
@@ -202,17 +205,12 @@ void App::symDef()
 	if(setNumber < size && setNumber >= 0)
 	{
 		cout << "Symmetric difference of Set " << currentSet << " and Set " << setNumber << endl;
-		//sets[currentSet].print();
-		//sets[setNumber].print();
-		cout << "\nSymmetric difference: " << endl;
-		try {
-			//sets[currentSet].intersection(sets[setNumber]);
-		} catch (Set::Exceptions ex) {
-			switch (ex)
-			{
-				case Set::EMPTY : cout << "empty set" << endl; break;
-			}
-		}
+		cout << "Set " << currentSet << ": ";
+		sets[currentSet].print();
+		cout << "Set " << setNumber << ": ";
+		sets[setNumber].print();
+		cout << "\nSymmetric difference: ";
+		sets[currentSet].symDef(sets[setNumber]);
 	}
 	else
 	{

@@ -153,13 +153,18 @@ void Set::remove(int n)
 // bemeneti ertek: nincs, kimeneti ertek: nincs
 void Set::print()
 {
-	cout << endl << "Items: ";
-	Node *p = root->next;
-
-	while(p != 0)
+	if(!isEmpty())
 	{
-		cout << p->value << " ";
-		p = p->next;
+		Node *p = root->next;
+		while(p != 0)
+		{
+			cout << p->value << " ";
+			p = p->next;
+		}
+	}
+	else
+	{
+		cout << "empty set";
 	}
 	cout << endl;
 }
@@ -181,27 +186,26 @@ void Set::intersection(Set& s)
 {
 	if (!isEmpty() && !s.isEmpty())
 	{
-		// int iOfThis = size-1;
-		// int iOfArg = s.getSize()-1;
-		// int * itemsOfArg = s.getItems();
+		Node *itemOfThis = root->next;
+		Node *itemOfArg = s.root->next;
 
-		// while (iOfThis >= 0 && iOfArg >= 0)
-		// {
-		// 	if (items[iOfThis] > itemsOfArg[iOfArg])
-		// 	{
-		// 		iOfThis--;
-		// 	}
-		// 	else if (items[iOfThis] < itemsOfArg[iOfArg])
-		// 	{
-		// 		iOfArg--;
-		// 	}
-		// 	else if (items[iOfThis] == itemsOfArg[iOfArg])
-		// 	{
-		// 		cout << items[iOfThis] << " ";
-		// 		iOfThis--;
-		// 		iOfArg--;
-		// 	}
-		// }
+		while (itemOfThis != 0 && itemOfArg != 0)
+		{
+			if (itemOfThis->value > itemOfArg->value)
+			{
+				itemOfArg = itemOfArg->next;
+			}
+			else if (itemOfThis->value < itemOfArg->value)
+			{
+				itemOfThis = itemOfThis->next;
+			}
+			else if (itemOfThis->value == itemOfArg->value)
+			{
+				cout << itemOfThis->value << " ";
+				itemOfThis = itemOfThis->next;
+				itemOfArg = itemOfArg->next;
+			}
+		}
 		cout << endl;
 	}
 	else
@@ -212,7 +216,18 @@ void Set::intersection(Set& s)
 
 void Set::symDef(Set& s)
 {
-	//
+	if(isEmpty())
+	{
+		s.print();
+	}
+	else if(s.isEmpty())
+	{
+		print();
+	}
+	else
+	{
+		cout << "ELSE" << endl;
+	}
 }
 
 // tartalmaz-e a halmaz egy adott elemet
