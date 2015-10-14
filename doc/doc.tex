@@ -52,7 +52,7 @@
 
 %%%%%%%%%%%%%%%%%%%% SZEMÉLYES ADATOK %%%%%%%%%%%%%%%%%%%%
 \begin{center}
-\begin{tcolorbox}[title=\Large{\textsc{Objektum elvû alkalmazások fejlesztése}}\\Dokumentáció az 1. házi feladathoz,arc=0mm]
+\begin{tcolorbox}[title=\Large{\textsc{Objektum elvû alkalmazások fejlesztése}}\\Dokumentáció a 2. házi feladathoz,arc=0mm]
 \begin{minipage}[t]{0.5\textwidth}
 	\textbf{Név:} Soós Bálint\\
 	\textbf{Neptun kód:} HDX9MU\\
@@ -69,18 +69,22 @@
 
 %%%%%%%%%%%%%%%%%%%% FELADAT LEÍRÁSA %%%%%%%%%%%%%%%%%%%%
 {\textbf {Feladatleírás}}\\[6pt]
-Valósítsa meg az egész számokat tartalmazó halmaz típust! A halmazt dinamikusan
-lefoglalt tömb segítségével ábrázolja! Implementálja a szokásos mûveleteket (elem
-betevése, kivétele, üres-e a halmaz, egy elem benne van-e a halmazban), valamint két
-halmaz metszetét, továbbá egy halmaz kiírását, és végül a másoló konstruktort és az
-értékadás operátort! Törekedjen a metszetképzés mûveletigényének
-minimalizálására, a dokumentációban mutasson rá a saját megoldásának
-mûveletigényére!
+Készítsen egy halmaz típust! A halmazt rendezett láncolt listával ábrázolja!
+Implementálja a szokásos mûveleteket (elem betétele, kivétele, benne van-e egy adott
+elem, üres-e), egészítse ki az osztályt a halmaz tartalmát kiíró operátor<<-ral!
+Definiáljon olyan barát-operátorokat is, amely kiszámítja két halmaz szimmetrikus
+differenciáját és metszetét! A metszet mûveletigénye: O(m+n), ahol m és n a két
+halmaz elemszáma. 
+
+\vspace{18pt}
+
+{\textbf {Halmaz típus}}\\[6pt]
+A feladat megoldásához definiálni kell egy egész számokat tartalmazó halmaz típust. 
 
 \vspace{18pt}
 
 {\textbf {Típusérték-halmaz}}\\[6pt]
-Feladatom egy egész számokat tartalmazó halmaz típus megvalósítása, azaz olyan (esetünkben dinamikus) tömb létrehozása, amelyben az elemek nem ismétlõdhetnek.
+Egész számok halmaza. (beleértve az üres halmazt is)
 
 \vspace{18pt}
 
@@ -96,26 +100,27 @@ Feladatom egy egész számokat tartalmazó halmaz típus megvalósítása, azaz olyan (
 	Szerepel-e az adott elem a halmaz elemei között.\\
 	\item \textit{Halmaz kiírása}\\[4pt]
 	Megjelenítjük a halmaz méretét, és az elemek listáját.\\
+	\newpage
 	\item \textit{Két halmaz metszete}\\[4pt]
 	Két halmaz metszete egy olyan halmaz, melynek elemei mindkét halmaznak is elemei.\\
+	\item \textit{Két halmaz szimmetrikus differenciája}\\[4pt]
+	Két halmaz szimmetrikus differenciája a halmazok úniójának és metszetének különbsége.\\
 \end{enumerate}
 
 {\textbf {Reprezentáció}}\\[6pt]
-Az egész számokat tartalmazó halmazt egy dinamikusan lefoglalt, egydimenziós, 1-tõl n-ig indexelt tömbbel ábrázoltam, amelynek méretét (tömb hosszúságát) egy külön változóban tárolom. Az halmazmûveletek hatékonyságát szem elõtt tartva a tömb elemei rendezve vannak. A rendezéshez a beszúró rendezés algoritmusát használtam.\\
+Az egész számokat tartalmazó halmazt egy egyirányú, fejelemes, láncolt listával ábrázoltam. Az halmazmûveletek hatékonyságát szem elõtt tartva a lista elemei rendezve vannak. A rendezéshez a beszúró rendezés algoritmusát használtam.\\
 
 {\textbf {Implementáció}}\\[2pt]
 \begin{enumerate}[topsep=1pt,noitemsep,leftmargin=*]
 	\item \textit{Elem berakása a halmazba (put)}\\[4pt]
-	A tömb hosszúságát eggyel megnövelve (dinamikusan lefoglalt tömb esetén ehhez elõször törölni kell a tömböt) a beszúró rendezés algoritmusát felhasználva berakom a tömbbe a megadott elemet.\\
-	Ehhez létrehozok egy ideiglenes, az eredeti tömb hosszúságánál eggyel hosszabb statikus tömböt, amelybe a beszúró algoritmus során bepakolom az elemeket, majd az algoritmus végén átmásolom az eredeti tömbbe.\\
+	A listán végighaladva a beszúró algoritmust alkalmazva a keresett pozícióban létrehozok egy új elemet és az elõtte lévõ elem next-jét az új elemre állítom, az új elem nextjét pedig az utána következõ elemre.\\
 	\item \textit{Elem kivétele a halmazból (remove)}\\[4pt]
-	Egy elem kivételére létrehozok egy statikus, az eredeti tömb hosszúságánál eggyel rövidebb ideiglenes tömböt, amibe az adott elem kivételével átmásolom a tömb tartalmát.\\
-	Az algoritmus végeztével az ideiglenes tömb tartalmát átmásolom az eredeti tömbbe.\\
+	Egy elem kivételénél ugyanazt az algoritmust használom, mint az elem berakásánál, csak itt a megadott pozícióban kiveszem az elemet, az elõtte álló elem mutatóját a következõ elemre állítom, illetve az adott elemet törlöm.\\
 	\item \textit{Üres-e a halmaz (isEmpty)}\\[4pt]
-	Ha a tömb hosszúsága 0, akkor a tömb üres.
+	Ha a lista fejelemét követõ elsõ elem nullpointer, akkor a halmaz üres.
 	\begin{stuki}
 		\stm{empty := false}
-		\begin{IF}{1}{\stm{size = 0}}
+		\begin{IF}{1}{\stm{root->next = 0}}
 			\stm{empty := true}
 			\ELSE
 			\stm{-}
@@ -123,73 +128,71 @@ Az egész számokat tartalmazó halmazt egy dinamikusan lefoglalt, egydimenziós, 1-
 		\stm{return: empty}
 	\end{stuki}
 	\item \textit{Elem benne van-e a halmazban (isContain)}\\[4pt]
-	items[]: halmaz elemeit tartamazó dinamikusan lefoglalt tömb, size: a tömb hosszúsága (halmaz mérete)
 	\begin{stuki}
 		\stm{found := false}
-		\stm{i := 0}
-		\begin{WHILE}{2}{\stm{i < size \wedge \neg found}}
-			\begin{IF}{1}{\stm{items[i] = n}}
+		\stm{*p = root->next}
+		\begin{WHILE}{3}{\stm{\neg(p = 0) \wedge \neg found}}
+			\begin{IF}{1}{\stm{p->value = n}}
 				\stm{found = true}
 				\ELSE
 				\stm{-}
 			\end{IF}
+			\stm{p = p->next}
 		\end{WHILE}
 		\stm{return: found}
 	\end{stuki}
 	\newpage
 	\item \textit{Halmaz kiírása (print)}\\[4pt]
-	Tömb elemein végiglépdelve kiírjuk a kimenetre az elemek értékeit. (a programban a tömb hosszúságát is kiírjuk) 
-	\begin{stuki}
-		\stm{i:= 0}
-		\begin{WHILE}{2}{\stm{i < size}}
-			\stm{output: items[i]}
-			\stm{i:=i+1}
-		\end{WHILE}
-	\end{stuki}
+	Lista elemein végiglépdelve kiírjuk a kimenetre az elemek értékeit.\\
 	\item \textit{Két halmaz metszete (intersection)}\\[4pt]
-	Az s és h halmaz metszete (felhasználva, hogy a tömbök rendezettek és lehetnek üresek is).
-	\begin{stuki}
-		\begin{IF}[90]{11}{\stm{\neg s.isEmpty() \wedge \neg h.isEmpty()}}
-			\stm{iOfS := s.size-1}
-			\stm{iOfH := h.size-1}
-			\begin{WHILE}{8}{\stm{iOfS >= 0 \wedge iOfH >= 0}}
-				\begin{IF}[90]{1}{\stm{s.items[iOfS] > h.items[iOfH]}}
-					\stm{iOfS := iOfS-1}
-					\ELSE
-					\stm{-}
-				\end{IF}
-				\begin{IF}[90]{1}{\stm{s.items[iOfS] < h.items[iOfH]}}
-					\stm{iOfH := iOfH-1}
-					\ELSE
-					\stm{-}
-				\end{IF}
-				\begin{IF}[90]{3}{\stm{s.items[iOfS] = h.items[iOfH]}}
-					\stm{output: s.items[iOfS]}
-					\stm{iOfS := iOfS-1}
-					\stm{iOfH := iOfH-1}
-					\ELSE
-					\stm{-}
-				\end{IF}
-			\end{WHILE}
-			\ELSE
-			\stm{-}
-		\end{IF}
-	\end{stuki}
-	Metszetképzés mûveletigénye:\\
-	c1: függvény kiértékelés\\
-	c2: értékadás, kivonás\\
-	c3: reláció kiértékelés\\
-	c4: tömb elemének kiolvasásása\\
-	c5: output\\
-	n1, n2: tömbök hossza\\
+	Az A és B halmaz metszetét (felhasználva, hogy a listák rendezettek és lehetnek üresek is) úgy kapjuk meg, hogy
+	a két listán párhumazosan lépdelve, amíg valamelyik el nem fogy:
+	\begin{enumerate}[noitemsep,label=\arabic*)]
+		\item {ha A halmaz eleme nagyobb, mint a B halmaz eleme, akkor B halmaz következõ elemére lépek}
+		\item {ha A halmaz eleme kisebb, mint a B halmaz eleme, akkor A halmaz következõ elemére lépek}
+		\item {ha A halmaz eleme egyenlõ B halmaz elemével, akkor metszetelemet találtam}
+	\end{enumerate}
+	\item \textit{Két halmaz szimmetrikus differenciája (symDef)}\\[4pt]
+	Az A és B halmaz szimmetrikus differenciáját (felhasználva, hogy a listák rendezettek és lehetnek üresek is) úgy kapjuk meg, hogy
+	a két listán párhumazosan lépdelve, amíg valamelyik el nem fogy:
+	\begin{enumerate}[noitemsep,label=\arabic*)]
+		\item {ha A halmaz eleme nagyobb, mint a B halmaz eleme, akkor B halmaz elemét kiírom, majd a következõ elemére lépek}
+		\item {ha A halmaz eleme kisebb, mint a B halmaz eleme, akkor A halmaz elemét kiírom, majd a következõ elemére lépek}
+		\item {ha A halmaz eleme egyenlõ B halmaz elemével, akkor metszetelemet találtam, mindkettõvel a következõ elemükre lépek}
+	\end{enumerate}
+	Ha elfogy valamelyik halmaz, akkor a másik halmazban lévõ maradék elemek a szimmetrikus differencia elemei, tehát azokat is kiírom.
 	
-	M: mûveletigény\\
-	minimális M (ha legalább egy tömb üres): M = 2 c1\\
-	maximális M: Ha nincs metszetelem: M =  2 c1 + 4 c2 + (n1+n2)*(c3 + 2 c4 + 2 c1)\\
-	M: O(n1+n2)\\
 \end{enumerate}
 
-\newpage
+\vspace{18pt}
+%%%%%%%%%%%%%%%%%%%% TESZTELÉSI TERV %%%%%%%%%%%%%%%%%%%%
+{\textbf {Tesztelési terv:}}%\\[2pt]
+\begin{enumerate}[topsep=2pt,noitemsep,label=\Roman*),leftmargin=*]
+	\item A feladat specifikációjára épülõ (fekete doboz) tesztesetek:
+	\begin{enumerate}[noitemsep,label=\arabic*)]
+		\item {1,2,3 hosszúságú halmazok létrehozása a put metódussal}
+		\item {1,2,3 hosszúságú halmazok esetén a remove metódus kipróbálása}
+		\item {0 hosszúságú halmazok esetén a remove metódus hívása}
+		\item {0,1,2 hosszúságú halmazok esetén az isEmpty és isContain metódus kipróbálása}
+		\item {0,1,2 hosszúságú halmazok esetén az isEmpty és isContain metódus kipróbálása}
+		\item {0,1,2 hosszúságú halmazok esetén a print metódus kipróbálása}
+		\item {két azonos (nem 0) hosszúságú halmazok metszete}
+		\item {két különbözõ (nem 0) hosszúságú halmazok metszete}
+		\item {két különbözõ (az egyik 0) hosszúságú halmazok metszete}
+		\item {két 0 hosszúságú halmazok metszete}
+	\end{enumerate}
+	\item A megoldó programra épülõ (fehér doboz) tesztesetek:
+	\begin{enumerate}[noitemsep,label=\arabic*)]
+		\item Halmazok létrehozása (max 10 db halmaz)
+		\item Már meglévõ 10 db halmaz esetén új halmaz létrehozás (max 10 db halmaz lehet)
+		\item Halmazok közti váltás, ha valid, illetve ha invalid halmaz számot adunk meg
+		\item Új elem berakása a halmazba, ha az még nem létezik.
+		\item Új elem berakása a halmazba, ha az már létezik.
+		\item Elem törlése a halmazból, ha az létezik.
+		\item Elem törlése a halmazból, ha az nem létezik.
+	\end{enumerate}
+\end{enumerate}
+\vspace{18pt}
 {\textbf {Osztály}}\\[2pt]
 Az egész számokat tartalmazó halmaz típust egy Set nevû osztály segítségével valósítottam meg.
 \begin{table}[h]
@@ -197,39 +200,10 @@ Az egész számokat tartalmazó halmaz típust egy Set nevû osztály segítségével val
 	\begin{tabular}{|l|l|l|l|}
 		\cline{1-2} \cline{4-4}
 		\multicolumn{2}{|l|}{\textbf{Set}} & \textbf{} & \textbf{Exceptions} \\ \cline{1-2} \cline{4-4} 
-		\multicolumn{2}{|l|}{\begin{tabular}[c]{@{}l@{}}-items: int*\\ -size: int\end{tabular}} &  &  \\ \hline
-		\multicolumn{2}{|l|}{\begin{tabular}[c]{@{}l@{}}+Set()\\+Set(int)\\ +Set(Set\&)\\ +operator=(Set\&) : Set\\ +put(int) : void \\ +remove(int) : void \\ +print() : void \\ +intersection(Set\&) : void \\ +isContain(int) : bool \\ +isEmpty() : bool \\ +getSize() : int \\ +getItems() : int* \\\end{tabular}} & \multicolumn{1}{c|}{{\color[HTML]{000000} }} & \begin{tabular}[c]{@{}l@{}}+EMPTY\\ +CONTAIN\\ +INVALID\_ITEM\end{tabular} \\ \cline{1-2} \cline{4-4} 
+		\multicolumn{2}{|l|}{\begin{tabular}[c]{@{}l@{}}-Node : struct\\ -root : Node\end{tabular}} &  &  \\ \hline
+		\multicolumn{2}{|l|}{\begin{tabular}[c]{@{}l@{}}+Set()\\+Set(int)\\ +Set(Set\&)\\ +operator=(Set\&) : Set\\ +operator+(Set\&) : Set\\+operator-(Set\&) : Set\\ +operator<<(Set\&) : Set\\ +put(int) : void \\ +remove(int) : void \\ +print() : void \\ +intersection(Set\&) : void \\ +symDef(Set\&) : void \\ +isContain(int) : bool \\ +isEmpty() : bool \\ +getSize() : int \\ +getItems() : int* \\\end{tabular}} & \multicolumn{1}{c|}{{\color[HTML]{000000} }} & \begin{tabular}[c]{@{}l@{}}+EMPTY\\ +CONTAIN\\ +INVALID\_ITEM\end{tabular} \\ \cline{1-2} \cline{4-4} 
 	\end{tabular}
 \end{table}
 
 Az osztály-definíciót a set.h fejállományban helyeztem el.\\
-
-\vspace{18pt}
-%%%%%%%%%%%%%%%%%%%% TESZTELÉSI TERV %%%%%%%%%%%%%%%%%%%%
-{\textbf {Tesztelési terv:}}%\\[2pt]
-\begin{enumerate}[topsep=2pt,noitemsep,label=\Roman*),leftmargin=*]
-\item A feladat specifikációjára épülõ (fekete doboz) tesztesetek:
-	  \begin{enumerate}[noitemsep,label=\arabic*)]
-	  	\item {1,2,3 hosszúságú halmazok létrehozása a put metódussal}
-	  	\item {1,2,3 hosszúságú halmazok esetén a remove metódus kipróbálása}
-	  	\item {0 hosszúságú halmazok esetén a remove metódus hívása}
-	  	\item {0,1,2 hosszúságú halmazok esetén az isEmpty és isContain metódus kipróbálása}
-	  	\item {0,1,2 hosszúságú halmazok esetén az isEmpty és isContain metódus kipróbálása}
-	  	\item {0,1,2 hosszúságú halmazok esetén a print metódus kipróbálása}
-	  	\item {két azonos (nem 0) hosszúságú halmazok metszete}
-	  	\item {két különbözõ (nem 0) hosszúságú halmazok metszete}
-	  	\item {két különbözõ (az egyik 0) hosszúságú halmazok metszete}
-	  	\item {két 0 hosszúságú halmazok metszete}
-	  \end{enumerate}
-\item A megoldó programra épülõ (fehér doboz) tesztesetek:
-   \begin{enumerate}[noitemsep,label=\arabic*)]
-   \item Halmazok létrehozása (max 10 db halmaz)
-   \item Már meglévõ 10 db halmaz esetén új halmaz létrehozás (max 10 db halmaz lehet)
-   \item Halmazok közti váltás, ha valid, illetve ha invalid halmaz számot adunk meg
-   \item Új elem berakása a halmazba, ha az még nem létezik.
-   \item Új elem berakása a halmazba, ha az már létezik.
-   \item Elem törlése a halmazból, ha az létezik.
-   \item Elem törlése a halmazból, ha az nem létezik.
-   \end{enumerate}
-\end{enumerate}
 \end{document}
