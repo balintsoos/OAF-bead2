@@ -138,7 +138,7 @@ void App::remove()
 void App::print()
 {
 	cout << "\nSet " << currentSet << ": ";
-	sets[currentSet].print();	
+	sets[currentSet].print();
 }
 
 void App::isContain()
@@ -183,7 +183,8 @@ void App::intersection()
 		sets[setNumber].print();
 		cout << "\nIntersection: ";
 		try {
-			sets[currentSet].intersection(sets[setNumber]);
+			//sets[currentSet].intersection(sets[setNumber]);
+			sets[currentSet] + sets[setNumber];
 		} catch (Set::Exceptions ex) {
 			switch (ex)
 			{
@@ -210,7 +211,8 @@ void App::symDef()
 		cout << "Set " << setNumber << ": ";
 		sets[setNumber].print();
 		cout << "\nSymmetric difference: ";
-		sets[currentSet].symDef(sets[setNumber]);
+		//sets[currentSet].symDef(sets[setNumber]);
+		sets[currentSet] - sets[setNumber];
 	}
 	else
 	{

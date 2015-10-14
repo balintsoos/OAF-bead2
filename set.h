@@ -20,6 +20,9 @@ class Set
 
 		Set(Set& s);
 		Set& operator= (Set& s);
+		Set& operator+ (Set& s);
+		Set& operator- (Set& s);
+		Set& operator<< (Set& s);
 
 		void put(int n);
 		void remove(int n);

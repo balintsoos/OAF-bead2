@@ -90,6 +90,24 @@ Set& Set::operator= (Set& s)
 	return *this;
 }
 
+Set& Set::operator+ (Set& s)
+{
+	intersection(s);
+	return *this;
+}
+
+Set& Set::operator- (Set& s)
+{
+	symDef(s);
+	return *this;
+}
+
+Set& Set::operator<< (Set& s)
+{
+	s.print();
+	return *this;
+}
+
 // elem berakasa a halmazba
 // 
 // bemeneti adat: egesz szam, berakni kivant ertek
