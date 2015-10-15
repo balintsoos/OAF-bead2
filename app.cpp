@@ -179,9 +179,7 @@ void App::intersection()
 		cout << "\nIntersection: ";
 		try {
 			//sets[currentSet].intersection(sets[setNumber]);
-			cout << "[ ";
 			sets[currentSet] + sets[setNumber];
-			cout << "]" << endl;
 		} catch (Set::Exceptions ex) {
 			cout << "empty set" << endl;
 		}

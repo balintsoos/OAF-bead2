@@ -236,6 +236,7 @@ void Set::intersection(Set& s)
 				itemOfArg = itemOfArg->next;
 			}
 		}
+		cout << endl;
 	}
 	else
 	{
@@ -243,6 +244,9 @@ void Set::intersection(Set& s)
 	}
 }
 
+// ket halmaz syimmetrikus differenciaja
+// bemeneti adat: egy halmaz
+// kimeneti adat: nincs (void)
 void Set::symDef(Set& s)
 {
 	if(isEmpty())
@@ -292,6 +296,7 @@ void Set::symDef(Set& s)
 				This = This->next;
 			}
 		}
+		cout << endl;
 	}
 }
 
