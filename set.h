@@ -22,7 +22,7 @@ class Set
 		Set& operator= (Set& s);
 		Set& operator+ (Set& s);
 		Set& operator- (Set& s);
-		Set& operator<< (Set& s);
+		friend std::ostream& operator<<(std::ostream& o, Set& l);
 
 		void put(int n);
 		void remove(int n);

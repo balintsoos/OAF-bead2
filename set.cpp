@@ -102,10 +102,22 @@ Set& Set::operator- (Set& s)
 	return *this;
 }
 
-Set& Set::operator<< (Set& s)
-{
-	s.print();
-	return *this;
+std::ostream& operator<<(std::ostream& o, Set& s){
+	if(!s.isEmpty())
+	{
+		Set::Node *p = s.root->next;
+		while(p != 0)
+		{
+			o << p->value << " ";
+			p = p->next;
+		}
+	}
+	else
+	{
+		o << "empty set";
+	}
+	o << endl;
+	return o;
 }
 
 // elem berakasa a halmazba
@@ -224,7 +236,6 @@ void Set::intersection(Set& s)
 				itemOfArg = itemOfArg->next;
 			}
 		}
-		cout << endl;
 	}
 	else
 	{
@@ -281,7 +292,6 @@ void Set::symDef(Set& s)
 				This = This->next;
 			}
 		}
-		cout << endl;
 	}
 }
 
